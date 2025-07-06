@@ -22,42 +22,42 @@ namespace JaMoveo.Controllers
         //}
 
         // GET api/<AuthController>/5
-        [HttpGet("AllUsers")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            //try
-            //{
-            //    var users = await _Auth.GetAllUsers();
-            //    if(users.Count() > 0)
-            //    {
-            //        return Ok(users);
-            //    }
-            //    return Ok();
-            //}
-            //catch (Exception ex)
-            //{
-            //    return BadRequest("failed to read users");
-            //}
+        //[HttpGet("AllUsers")]
+        //public async Task<IActionResult> GetAllUsers()
+        //{
+        //    //try
+        //    //{
+        //    //    var users = await _Auth.GetAllUsers();
+        //    //    if(users.Count() > 0)
+        //    //    {
+        //    //        return Ok(users);
+        //    //    }
+        //    //    return Ok();
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    return BadRequest("failed to read users");
+        //    //}
 
-        }
+        //}
 
-        [HttpGet("AllInstruments")]
-        public async Task<IActionResult> GetAllInstruments()
-        {
-            try
-            {
-                var instruments = await _Auth.GetAllInstruments();
-                if (instruments.Count() > 0)
-                {
-                    return Ok(instruments);
-                }
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("failed to read users");
-            }
-        }
+        //[HttpGet("AllInstruments")]
+        //public async Task<IActionResult> GetAllInstruments()
+        //{
+        //    try
+        //    {
+        //        var instruments = await _Auth.GetAllInstruments();
+        //        if (instruments.Count() > 0)
+        //        {
+        //            return Ok(instruments);
+        //        }
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest("failed to read users");
+        //    }
+        //}
 
         // POST api/<AuthController>
         [HttpPost("Register")]

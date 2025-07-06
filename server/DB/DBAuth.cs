@@ -51,11 +51,5 @@ namespace JaMoveo.DB
             return instrument;
         }
 
-
-        public async Task<List<User>> GetAllUsers() => await _context.Users.ToListAsync();
-
-        public async Task<List<InstrumentItem>> GetAllInstruments() => await _context.Instruments.ToListAsync();
-
-
     }
 }

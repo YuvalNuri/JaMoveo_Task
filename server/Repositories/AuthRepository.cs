@@ -32,21 +32,5 @@ namespace JaMoveo.Repositories
             return await _dbAuth.RegisterAsync(user);
         }
 
-        public async Task<List<object>> GetAllUsers()
-        {
-            var users = await _dbAuth.GetAllUsers();
-            var dto = users.Select(u => (object)new
-            {
-                Username = u.Username,
-                Instrument = u.Instrument?.Name,
-                IsAdmin = u.IsAdmin
-            }).ToList();
-            return dto;
-        }
-
-        public async Task<List<InstrumentItem>> GetAllInstruments()
-        {
-            return await _dbAuth.GetAllInstruments();
-        }
     }
 }
