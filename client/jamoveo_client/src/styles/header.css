@@ -1,27 +1,19 @@
-/* Header.css (only the changed parts) */
-
-/* === Inner flex container === */
 .site-header__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  /* full-width instead of 1280 px cap */
-  width: 100%;
-  margin: 0;                   /* center no longer needed */
-  padding: 0 1rem;
-
-  /* keep the fluid height */
-  height: clamp(4rem, 8vh, 5.5rem);
+    width: 100%;
+    margin: 0;
+    padding: 0 1rem;
+    margin-bottom: 20;
+    
 }
 
-/* === Brand link === */
 .site-header__brand {
-  /* take up half the row */
-  flex: 0 0 50%;
-  max-width: 50%;
+    /*flex: 0 0 50%;*/
+    max-width: 50%;
 
-  /* font now equals 5 vw but never smaller
-     than 1.75 rem or larger than 3 rem        */
-  font-size: clamp(1.75rem, 5vw, 3rem);
+    font-size: clamp(1.75rem, 5rem, 8rem);
 }
+

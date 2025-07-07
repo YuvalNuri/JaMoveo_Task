@@ -41,24 +41,6 @@ namespace JaMoveo.Controllers
 
         //}
 
-        //[HttpGet("AllInstruments")]
-        //public async Task<IActionResult> GetAllInstruments()
-        //{
-        //    try
-        //    {
-        //        var instruments = await _Auth.GetAllInstruments();
-        //        if (instruments.Count() > 0)
-        //        {
-        //            return Ok(instruments);
-        //        }
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest("failed to read users");
-        //    }
-        //}
-
         // POST api/<AuthController>
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
@@ -70,6 +52,16 @@ namespace JaMoveo.Controllers
             }
             else
                 return BadRequest("Couldn't register user");
+        }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+        {
+            var (success, error, user) = await _Auth.LoginAsync(loginRequest);
+            if (!success)
+                return BadRequest(error);
+
+            return Ok(user);
         }
 
         //// PUT api/<AuthController>/5

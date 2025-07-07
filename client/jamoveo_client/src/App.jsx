@@ -9,8 +9,6 @@ import NavBar from './components/layout/NavBar'
 import Header from './components/layout/Header'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <ApiContextProvider>

@@ -37,18 +37,10 @@ namespace JaMoveo.DB
         public async Task<bool> UsernameExistsAsync(string username)
     => await _context.Users.AnyAsync(u => u.Username == username);
 
-        public async Task<InstrumentItem> GetOrCreateInstrumentAsync(string instrumentName)
+        public async Task<User?> GetUserByUsernameAsync(string username)
         {
-            var instrument = await _context.Instruments
-                                           .SingleOrDefaultAsync(i => i.Name == instrumentName);
-
-            if (instrument is null)
-            {
-                instrument = new InstrumentItem { Name = instrumentName };
-                _context.Instruments.Add(instrument);
-                await _context.SaveChangesAsync();
-            }
-            return instrument;
+            return await _context.Users
+                .SingleOrDefaultAsync(u => u.Username == username);
         }
 
     }

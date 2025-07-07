@@ -11,6 +11,6 @@ namespace JaMoveo.Models
         public string Password { get; set; }
 
         [Required]
-        public InstrumentItem Instrument { get; set; }
+        public string Instrument { get; set; }
     }
 }
