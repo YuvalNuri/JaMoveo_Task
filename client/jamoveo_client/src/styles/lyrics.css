@@ -1,0 +1,27 @@
+.line {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-bottom: 1rem;
+  justify-content: start;
+}
+
+.word-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 0.2rem;
+  min-width: 3ch; /* קובעת רוחב מינימלי */
+}
+
+.chord {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: blue;
+  line-height: 1;
+  min-height: 1em;
+}
+
+.lyrics {
+  font-size: 1rem;
+  line-height: 1.2;
+}

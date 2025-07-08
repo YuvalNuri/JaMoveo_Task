@@ -1,5 +1,6 @@
 using JaMoveo.DATA;
 using JaMoveo.DB;
+using JaMoveo.Hubs;
 using JaMoveo.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
+
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(
         builder.Configuration.GetConnectionString("Default")));
@@ -19,6 +23,19 @@ builder.Services.AddScoped<DBAuth>();
 builder.Services.AddScoped<AuthRepository>();
 builder.Services.AddScoped<DBInstruments>();
 builder.Services.AddScoped<InstrumentsRepository>();
+builder.Services.AddScoped<SongsRepository>();
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
@@ -31,7 +48,16 @@ if (true)
 
 app.UseHttpsRedirection();
 
-app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+//app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+app.UseCors("AllowSpecificOrigin");
+
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<RehearsalHub>("/rehearsalHub");
+    endpoints.MapControllers();
+});
 
 app.UseAuthorization();
 

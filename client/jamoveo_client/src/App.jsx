@@ -7,16 +7,19 @@ import { AuthProvider } from './context/AuthContext'
 import ApiContextProvider from './context/ApiContext'
 import NavBar from './components/layout/NavBar'
 import Header from './components/layout/Header'
+import { SocketProvider } from './context/SocketContext'
 
 function App() {
   return (
     <>
       <ApiContextProvider>
-        <AuthProvider>
-          <Header/>
-          <NavBar/>
-          <AppRouter />
-        </AuthProvider>
+        <SocketProvider>
+          <AuthProvider>
+            <Header />
+            <NavBar />
+            <AppRouter />
+          </AuthProvider>
+        </SocketProvider>
       </ApiContextProvider>
     </>
   )

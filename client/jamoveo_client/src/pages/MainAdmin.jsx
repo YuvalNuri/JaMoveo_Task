@@ -1,35 +1,32 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { ApiContext } from '../context/ApiContext';
-import CreatableSelect from 'react-select/creatable';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import '../styles/forms.css';
 
 export default function MainAdmin() {
     const navigate = useNavigate();
-    const [songs, setSongs] = useState([]);
-    const [pickedSong, setPickedSong] = useState(null);
+    const [query, setQuery] = useState('');
 
-    const handleSubmit = async e => {
+    const handleSubmit = e => {
         e.preventDefault();
+
+        if (query.trim()) {
+            navigate(`/results?query=${encodeURIComponent(query.trim())}`);
+        }
     };
 
     return (
         <div>
-            <h2>Waiting for the next song</h2>
+            <h2>Search any song...</h2>
             <form onSubmit={handleSubmit} style={{ maxWidth: 400 }}>
-
-                <CreatableSelect
+                <input
+                    className="form-input"
+                    type="text"
+                    value={query}
+                    onChange={e => setQuery(e.target.value)}
+                    placeholder="Type a song name"
                     required
-                    isClearable
-                    classNamePrefix="react-select"
-                    options={songs.map(song => ({ label: song, value: song }))}
-                    onChange={opt => setPickedSong(opt?.value || null)}
-                    placeholder="Pick a aong"
-                    styles={{ container: base => ({ ...base, margin: "0.5rem 0" }) }}
                 />
-
-                <button type="submit" style={{ margin: 15 }}>Let's start</button>
+                <button type="submit" style={{ margin: 15 }}>Search</button>
             </form>
         </div>
     );

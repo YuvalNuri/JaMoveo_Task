@@ -1,10 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import '../styles/forms.css';
 
 export default function Login() {
-  const { login } = useAuth();
+  const { user, login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     username: "",
@@ -16,8 +16,14 @@ export default function Login() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    if (await login(form)) navigate('/');
+    await login(form);
   };
+
+    useEffect(() => {
+      if (user) {
+        navigate("/");
+      }
+    }, [user]);
 
   return (
     <div>

@@ -5,8 +5,8 @@ import { ApiContext } from '../context/ApiContext';
 import CreatableSelect from 'react-select/creatable';
 import '../styles/forms.css';
 
-export default function Register() {
-  const { login } = useAuth();
+export default function Signup() {
+  const { user, login } = useAuth();
   const navigate = useNavigate();
   const { local, server } = useContext(ApiContext);
   const [instruments, setInstruments] = useState([]);
@@ -53,13 +53,22 @@ export default function Register() {
         }
         return res.json();
       })
-      .then((data) => alert('Registered successfully!'))
+      .then((data) => {
+        alert('Registered successfully!');
+      })
       .catch((error) => {
         console.log(error);
         alert('Signup failed. Please try again.');
       });
-    if (await login(form)) navigate('/');
+
+    await login({'username':form.username, 'password':form.password});
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <div>

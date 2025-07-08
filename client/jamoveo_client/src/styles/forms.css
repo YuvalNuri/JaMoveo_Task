@@ -1,9 +1,8 @@
-/* form.css – עיצוב אחיד לשדות ול-react-select */
 .form-input {
   width: 100%;
   padding: 0.6rem 0.75rem;
   font-size: 1rem;
-  border: 1px solid #cbd5e1;   /* slate-300 */
+  border: 1px solid #cbd5e1;
   border-radius: 4px;
   margin: 0.5rem 0;
   box-sizing: border-box;
@@ -11,11 +10,10 @@
 
 .form-input:focus {
   outline: none;
-  border-color: #2563eb;       /* blue-600 */
+  border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
-/* התאמה ל-react-select */
 .react-select__control {
   border-color: #cbd5e1;
   border-radius: 4px;
@@ -32,4 +30,8 @@
 .react-select__single-value {
   font-size: 1rem;
   line-height: 1.35;
+}
+
+.results-container{
+  justify-items: center;
 }

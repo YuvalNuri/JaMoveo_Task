@@ -1,17 +1,22 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
-import Register from '../pages/Signup';
+import Signup from '../pages/Signup';
 import NotFound from '../pages/NotFound';
 import ProtectedRoute from './ProtectedRoute';
+import Results from '../pages/Results';
+import '../styles/results.css';
+import Live from '../pages/Live';
 
 export default function AppRouter() {
   return (
-    <div>
+    <div className='results-container'>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/results" element={<Results/>}/>
+      <Route path="/live" element={<Live/>}/>
       {/* דוגמה למסך שמורשה רק למשתמשים מחוברים 
       <Route
         path="/dashboard"
