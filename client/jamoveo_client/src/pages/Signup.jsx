@@ -139,7 +139,7 @@ export default function Signup() {
           options={instruments.map(i => ({ label: i.name || i, value: i.name || i }))}
           onChange={opt => setForm({ ...form, instrument: opt?.value || '' })}
           placeholder="Instrument…"
-          styles={{ container: base => ({ ...base, margin: "0.5rem 0" }) }}
+          styles={ { container: base => ({ ...base, margin: "0.5rem 0" })}}
         />
 
         <button type="submit" style={{ margin: 15 }}>Finish</button>
