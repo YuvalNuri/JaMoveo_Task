@@ -26,27 +26,8 @@ namespace JaMoveo.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest("failed to read instruments");
             }
-        }
-
-        [HttpGet("Debug/Tables")]
-        public IActionResult GetTables()
-        {
-            using var connection = new SqliteConnection("Data Source=app.db");
-            connection.Open();
-
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT name FROM sqlite_master WHERE type='table'";
-
-            var tables = new List<string>();
-            using var reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                tables.Add(reader.GetString(0));
-            }
-
-            return Ok(tables);
         }
 
     }
