@@ -31,20 +31,20 @@ builder.Services.AddScoped<SongsRepository>();
 
 builder.Services.AddSingleton<SessionStateService>();
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowSpecificOrigin", policy =>
-//    {
-//        policy
-//            .WithOrigins(
-//                "http://localhost:5173",
-//                "https://ja-moveo-task-client.vercel.app"
-//            )
-//            .AllowAnyHeader()
-//            .AllowAnyMethod()
-//            .AllowCredentials();
-//    });
-//});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:5173",
+                "https://ja-moveo-task-client.vercel.app"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
@@ -57,10 +57,12 @@ if (true)
 
 app.UseHttpsRedirection();
 
-app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-//app.UseCors("AllowSpecificOrigin");
+//app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+app.UseCors("AllowSpecificOrigin");
 
 app.UseRouting();
+
+app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
@@ -68,7 +70,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
-app.UseAuthorization();
 
 app.MapControllers();
 
