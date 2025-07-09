@@ -19,7 +19,7 @@ export default function MainPlayer() {
 
     return (
         <div>
-            <h2>player</h2>
+            <h1>player</h1>
             <h3>Waiting for next song</h3>
         </div>
     );

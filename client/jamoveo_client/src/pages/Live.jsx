@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { MdScreenRotation } from "react-icons/md";
+import { MdArrowUpward, MdFastForward, MdScreenRotation, MdSlowMotionVideo } from "react-icons/md";
 import { useAuth } from "../context/AuthContext";
 import { useSocket } from "../context/SocketContext";
 import LyricsAndChordsDisplay from "../components/ui/LyricsAndChordsDisplay";
@@ -12,7 +12,7 @@ import '../styles/live.css';
 export default function Live() {
     const { local } = useContext(ApiContext);
     const { state } = useLocation();
-    const { selectedSong,resetSelectedSong, connection } = useSocket();
+    const { selectedSong, resetSelectedSong, connection } = useSocket();
     const song = state?.song || selectedSong;
     const navigate = useNavigate();
     const { user } = useAuth();
@@ -24,6 +24,7 @@ export default function Live() {
     const [isScrolling, setIsScrolling] = useState(false);
     const [atBottom, setAtBottom] = useState(false);
     const [scrollSpeed, setScrollSpeed] = useState(110);
+    const [isShortScreen, setIsShortScreen] = useState(false);
 
     console.log("selectedSong:", selectedSong);
     console.log("state.song:", state?.song);
@@ -33,6 +34,7 @@ export default function Live() {
     useEffect(() => {
         const handleResize = () => {
             setIsSmallScreen(window.innerWidth < 768);
+            setIsShortScreen(window.innerHeight < 900);
         };
 
         handleResize();
@@ -107,16 +109,25 @@ export default function Live() {
     }, [connection, navigate, user.role]);
 
     // render after hooks
-if (!song) return <p>Waiting for the song to start...</p>;
-if (!lyricsData) return <p>Loading lyrics...</p>;
+    if (!song) return <p>Waiting for the song to start...</p>;
+    if (!lyricsData) return <p>Loading lyrics...</p>;
 
     return (
         <div className="live-container">
-            <h1>{song.name}</h1>
-            <h3>{song.artist}</h3>
+            {isShortScreen ? (
+                <h1>
+                    {song.name} <small className="h3">({song.artist})</small>
+                </h1>
+            ) : (
+                <>
+                    <h1>{song.name}</h1>
+                    <h3>{song.artist}</h3>
+                </>
+            )}
+
             {song.img && <img src={song.img} alt={song.name} />}
 
-            {user.isAdmin && <QuitButton />}
+            {user.isAdmin && <div className="quit-row"><QuitButton /></div>}
 
             {isSmallScreen
                 ? <div>
@@ -124,36 +135,111 @@ if (!lyricsData) return <p>Loading lyrics...</p>;
                     <p>For the best experience, please rotate your device or use a larger screen.</p>
                 </div>
                 : <>
-                    <ScrollToggle
-                        isScrolling={isScrolling}
-                        onToggle={() => setIsScrolling((prev) => !prev)}
-                    />
+                    {isShortScreen ? (
+                        <div className="lyricsnchords-container" style={{ display: 'flex', gap: '1rem' }}>
+                            <LyricsAndChordsDisplay
+                                lyricsData={lyricsData}
+                                role={user.instrument}
+                                isScrolling={isScrolling}
+                                containerRef={lyricsContainerRef}
+                            />
+                            <div className="scroll-controls vertical">
+                                <ScrollToggle
+                                    isScrolling={isScrolling}
+                                    onToggle={() => setIsScrolling((prev) => !prev)}
+                                />
 
-                    <div className="scroll-speed-controls">
-                        <p>Scroll speed:</p>
-                        <button
+                                <button className="scroll-faster"
+                                    onClick={() => setScrollSpeed(s => Math.max(50, s - 10))}
+                                    disabled={scrollSpeed <= 50}
+                                >
+                                    <MdFastForward size={20} />
+                                </button>
+                                <button className="scroll-slower"
+                                    onClick={() => setScrollSpeed(s => Math.min(200, s + 10))}
+                                    disabled={scrollSpeed >= 200}
+                                >
+                                    <MdSlowMotionVideo size={20} />
+                                </button>
+
+                                <button className="scroll-top" onClick={() => {
+                                    if (lyricsContainerRef.current) {
+                                        lyricsContainerRef.current.scrollTop = 0;
+                                        setAtBottom(false);
+                                    }
+                                }}>
+                                    <MdArrowUpward size={20} />
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="lyricsnchords-container">
+                            <div className="scroll-controls">
+                                <span>Scroll Control</span>
+                                <ScrollToggle
+                                    isScrolling={isScrolling}
+                                    onToggle={() => setIsScrolling((prev) => !prev)}
+                                />
+
+                                <button className="scroll-faster"
+                                    onClick={() => setScrollSpeed(s => Math.max(50, s - 10))}
+                                    disabled={scrollSpeed <= 50}
+                                >
+                                    <MdFastForward size={20} />
+                                </button>
+                                <button className="scroll-slower"
+                                    onClick={() => setScrollSpeed(s => Math.min(200, s + 10))}
+                                    disabled={scrollSpeed >= 200}
+                                >
+                                    <MdSlowMotionVideo size={20} />
+                                </button>
+
+                                <button className="scroll-top" onClick={() => {
+                                    if (lyricsContainerRef.current) {
+                                        lyricsContainerRef.current.scrollTop = 0;
+                                        setAtBottom(false);
+                                    }
+                                }}>
+                                    <MdArrowUpward size={20} />
+                                </button>
+                            </div>
+                            <LyricsAndChordsDisplay
+                                lyricsData={lyricsData}
+                                role={user.instrument}
+                                isScrolling={isScrolling}
+                                containerRef={lyricsContainerRef}
+                            />
+                        </div>
+
+                    )}
+
+                    {/*<div className="scroll-controls">
+                        <span>Scroll Control</span>
+                        <ScrollToggle
+                            isScrolling={isScrolling}
+                            onToggle={() => setIsScrolling((prev) => !prev)}
+                        />
+
+                        <button className="scroll-faster"
                             onClick={() => setScrollSpeed(s => Math.max(50, s - 10))}
                             disabled={scrollSpeed <= 50}
                         >
-                            Faster
+                            <MdFastForward size={20} />
                         </button>
-                        <button
+                        <button className="scroll-slower"
                             onClick={() => setScrollSpeed(s => Math.min(200, s + 10))}
                             disabled={scrollSpeed >= 200}
                         >
-                            Slower
+                            <MdSlowMotionVideo size={20} />
                         </button>
-                    </div>
 
-
-                    <div className="scroll-top-controls">
-                        <button onClick={() => {
+                        <button className="scroll-top" onClick={() => {
                             if (lyricsContainerRef.current) {
                                 lyricsContainerRef.current.scrollTop = 0;
                                 setAtBottom(false);
                             }
                         }}>
-                            Scroll to top
+                            <MdArrowUpward size={20} />
                         </button>
                     </div>
 
@@ -162,7 +248,7 @@ if (!lyricsData) return <p>Loading lyrics...</p>;
                         role={user.instrument}
                         isScrolling={isScrolling}
                         containerRef={lyricsContainerRef}
-                    />
+                    />*/}
                 </>
             }
         </div>

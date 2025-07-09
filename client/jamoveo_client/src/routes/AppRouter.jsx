@@ -5,12 +5,11 @@ import Signup from '../pages/Signup';
 import NotFound from '../pages/NotFound';
 import ProtectedRoute from './ProtectedRoute';
 import Results from '../pages/Results';
-import '../styles/results.css';
 import Live from '../pages/Live';
 
 export default function AppRouter() {
   return (
-    <div className='results-container'>
+    <div className='general-container'>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />

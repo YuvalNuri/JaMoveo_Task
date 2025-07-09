@@ -49,7 +49,7 @@ useEffect(() => {
 
     return (
         <div className='results-container'>
-            <h2>Song results for: "{query}"</h2>
+            <h1>Song results for: "{query}"</h1>
 
             <div className="results-grid">
                 {results.map((song, idx) => (

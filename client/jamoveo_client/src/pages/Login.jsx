@@ -10,25 +10,28 @@ export default function Login() {
     username: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setIsLoading(true);
     await login(form);
+    setIsLoading(false);
   };
 
-    useEffect(() => {
-      if (user) {
-        navigate("/");
-      }
-    }, [user]);
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <div>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit} style={{ maxWidth: 400 }}>
+      <h2 >Login</h2>
+      <form onSubmit={handleSubmit} style={{ maxWidth: 400 }} className='form-container'>
         {/* username */}
         <input
           className="form-input"
@@ -53,10 +56,10 @@ export default function Login() {
           minLength={6}
         />
 
-        <button type="submit" style={{ margin: 15 }}>Finish</button>
+        <button className='special-btn' type="submit">Finish</button>
       </form>
 
-            <p style={{ marginTop: 20 }}>
+      <p style={{ marginTop: 20 }}>
         Don’t have an account? <br />
         <Link to="/signup">Sign up here</Link>
       </p>

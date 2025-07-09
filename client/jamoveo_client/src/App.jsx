@@ -14,8 +14,19 @@ function App() {
       <ApiContextProvider>
         <SocketProvider>
           <AuthProvider>
-            <Header />
-            <AppRouter />
+            <div className='main-app'>
+              <div className="floating-shapes">
+                <div className="shape"></div>
+                <div className="shape"></div>
+                <div className="shape"></div>
+                <div className="shape"></div>
+                <div className="shape"></div>
+              </div>
+              <div className='app-container'>
+              <Header />
+              <AppRouter />
+              </div>
+            </div>
           </AuthProvider>
         </SocketProvider>
       </ApiContextProvider>

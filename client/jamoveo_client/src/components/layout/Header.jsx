@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../../styles/header.css";
+import '../../styles/header.css'
 import { useAuth } from '../../context/AuthContext.jsx';
 
 
@@ -14,16 +14,16 @@ export default function Header() {
   };
 
   return (
-    <div className="site-header">
-      <div className="site-header__inner">
-        <Link to="/" className="site-header__brand">
-          JaMoveo
-        </Link>
+    <div>
+      <div className="logo">
+        <h1>JaMoveo</h1>
       </div>
       {!!user &&
-        <div>
-          <span>Hello {user.username} | </span>
-          <span onClick={handleLogout}>Logout</span>
+        <div className="user-actions">
+          <span className="hello">Hello {user.username}</span>
+          <span className="divider">|</span>
+          <button className="logout-btn" onClick={handleLogout}>Logout</button>
+
         </div>}
     </div>
   );

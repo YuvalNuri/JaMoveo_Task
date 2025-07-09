@@ -17,7 +17,7 @@ export default function MainAdmin() {
 
     return (
         <div>
-            <h2>Search any song...</h2>
+            <h1>Search any song...</h1>
             <form onSubmit={handleSubmit} style={{ maxWidth: 400 }}>
                 <input
                     className="form-input"
@@ -28,7 +28,7 @@ export default function MainAdmin() {
                     style={{ direction: detectHebrew(query) ? "rtl" : "ltr" }}
                     required
                 />
-                <button type="submit" style={{ margin: 15 }}>Search</button>
+                <button type="submit" className='special-btn' style={{ margin: 15 }}>Search</button>
             </form>
         </div>
     );
