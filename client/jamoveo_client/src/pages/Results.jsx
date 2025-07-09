@@ -6,7 +6,7 @@ import { useSocket } from '../context/SocketContext';
 
 export default function Results() {
     const { local, server } = useContext(ApiContext);
-    const { connection } = useSocket();
+    const { connection, selectedSong } = useSocket();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const query = searchParams.get('query') || '';
@@ -33,17 +33,19 @@ export default function Results() {
             .catch((error) => console.log(error));
     }, [query]);
 
-    const handleSongSelect = (song) => {
-        if (!connection) return;
+const handleSongSelect = (song) => {
+    if (!connection) return;
 
-        console.log("Invoking SelectSong with:", song);
-        connection.invoke("SelectSong", song)
-            .then(() => {
-                navigate("/live", { state: { song } });
-            })
-            .catch(err => console.error(err));
-    };
+    console.log("Invoking SelectSong with:", song);
+    connection.invoke("SelectSong", song)
+        .catch(err => console.error(err));
+};
 
+useEffect(() => {
+    if (selectedSong) {
+        navigate("/live");
+    }
+}, [selectedSong, navigate]);
 
     return (
         <div className='results-container'>

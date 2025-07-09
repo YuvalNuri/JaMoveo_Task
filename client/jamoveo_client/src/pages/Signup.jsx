@@ -13,6 +13,7 @@ export default function Signup() {
   const [form, setForm] = useState({
     username: "",
     password: "",
+    confirmPassword: "",
     instrument: "",
   });
 
@@ -39,9 +40,31 @@ export default function Signup() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+
+    //strong password validate
+    const strongEnough = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/.test(form.password);
+    if (!strongEnough) {
+      alert("Password must be at least 6 characters long and include both letters and numbers.");
+      return;
+    }
+
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    const payload = {
+      username: form.username,
+      password: form.password,
+      instrument: form.instrument,
+    };
+
+    console.log(form);
+    console.log(payload);
+
     await fetch(local + "api/Auth/Register", {
       method: "POST",
-      body: JSON.stringify(form),
+      body: JSON.stringify(payload),
       headers: {
         "Content-Type": "application/json; charset=UTF-8",
         Accept: "application/json; charset=UTF-8",
@@ -61,7 +84,7 @@ export default function Signup() {
         alert('Signup failed. Please try again.');
       });
 
-    await login({'username':form.username, 'password':form.password});
+    await login({ 'username': form.username, 'password': form.password });
   };
 
   useEffect(() => {
@@ -98,6 +121,17 @@ export default function Signup() {
           minLength={6}
         />
 
+        <input
+          className="form-input"
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={form.confirmPassword}
+          onChange={handleChange}
+          required
+        />
+
+
         <CreatableSelect
           required
           isClearable
@@ -110,6 +144,11 @@ export default function Signup() {
 
         <button type="submit" style={{ margin: 15 }}>Finish</button>
       </form>
+
+      <p style={{ marginTop: 20 }}>
+              Allready have an account? <br /> 
+              <Link to="/login">Login here</Link>
+            </p>
     </div>
   );
 }

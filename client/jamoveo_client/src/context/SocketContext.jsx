@@ -8,8 +8,7 @@ export const SocketProvider = ({ children }) => {
     const [connection, setConnection] = useState(null);
     const { local, server } = useContext(ApiContext);
     const [selectedSong, setSelectedSong] = useState(null);
-
-    const resetSelectedSong = () => setSelectedSong(null);
+    const [sessionQuit, setSessionQuit] = useState(false);
 
     useEffect(() => {
         const conn = new signalR.HubConnectionBuilder()
@@ -24,6 +23,12 @@ export const SocketProvider = ({ children }) => {
             setSelectedSong(song);
         });
 
+        conn.on("SessionQuit", () => {
+            console.log("Received SessionQuit");
+            setSessionQuit(true);
+            setSelectedSong(null); 
+        });
+
         return () => {
             conn.stop();
         };
@@ -31,7 +36,7 @@ export const SocketProvider = ({ children }) => {
     }, []);
 
     return (
-        <SocketContext.Provider value={{ connection, selectedSong, resetSelectedSong }}>
+        <SocketContext.Provider value={{ connection, selectedSong }}>
             {children}
         </SocketContext.Provider>
     );

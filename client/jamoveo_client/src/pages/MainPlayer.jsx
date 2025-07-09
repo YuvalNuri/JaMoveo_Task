@@ -9,24 +9,13 @@ import { useSocket } from '../context/SocketContext';
 export default function MainPlayer() {
     const navigate = useNavigate();
     const { local, server } = useContext(ApiContext);
-    const { connection, selectedSong } = useSocket();
+    const { selectedSong } = useSocket();
 
     useEffect(() => {
-        if (!connection) return;
-
-        connection.on("SongSelected", (song) => {
-            navigate("/live", { state: { song } });
-        });
-
-        connection.on("SessionQuit", () => {
-            navigate("/");
-        });
-
-        return () => {
-            connection.off("SongSelected");
-            connection.off("SessionQuit");
-        };
-    }, [connection]);
+        if (selectedSong) {
+            navigate("/live");
+        }
+    }, [selectedSong, navigate]);
 
     return (
         <div>

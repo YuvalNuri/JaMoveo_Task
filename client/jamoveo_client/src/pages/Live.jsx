@@ -97,7 +97,6 @@ export default function Live() {
 
         const handler = () => {
             navigate("/");
-            resetSelectedSong();
         };
 
         connection.on("SessionQuit", handler);
