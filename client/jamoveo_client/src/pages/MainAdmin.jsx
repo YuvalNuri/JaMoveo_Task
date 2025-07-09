@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import detectHebrew from '../assets/utils/detectHebrew';
 import '../styles/forms.css';
 
 export default function MainAdmin() {
@@ -24,6 +25,7 @@ export default function MainAdmin() {
                     value={query}
                     onChange={e => setQuery(e.target.value)}
                     placeholder="Type a song name"
+                    style={{ direction: detectHebrew(query) ? "rtl" : "ltr" }}
                     required
                 />
                 <button type="submit" style={{ margin: 15 }}>Search</button>

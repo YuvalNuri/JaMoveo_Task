@@ -52,12 +52,13 @@ namespace JaMoveo.Repositories
             if (!CryptographicOperations.FixedTimeEquals(computedHash, user.PasswordHash)) // compare
                 return (false, "Invalid password", null);
 
-            return (true, "",new
+            return (true, "", new UserLoginResponse
             {
                 Username = user.Username,
                 Instrument = user.Instrument?.Name,
                 IsAdmin = user.IsAdmin
             });
+
         }
 
     }

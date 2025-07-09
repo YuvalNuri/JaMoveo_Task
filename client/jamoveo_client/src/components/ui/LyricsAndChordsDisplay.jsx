@@ -1,3 +1,4 @@
+import detectHebrew from '../../assets/utils/detectHebrew';
 import '../../styles/lyrics.css';
 
 export default function LyricsAndChordsDisplay({
@@ -7,7 +8,10 @@ export default function LyricsAndChordsDisplay({
   isHebrew = false,
   containerRef
 }) {
-      if (!lyricsData) return <p>Loading lyrics...</p>;
+
+  console.log("role:", role);
+
+  if (!lyricsData) return <p>Loading lyrics...</p>;
 
   return (
     <div
@@ -18,18 +22,29 @@ export default function LyricsAndChordsDisplay({
         textAlign: isHebrew ? "right" : "left"
       }}
     >
-      {lyricsData.map((line, idx) => (
-        <div key={idx} className="line">
-          {line.map((word, wIdx) => (
-            <span key={wIdx} className="word-block">
-              {role !== "singer" && (
-                <div className="chord">{word.chords || ""}</div>
-              )}
-              <div className="lyrics">{word.lyrics}</div>
-            </span>
-          ))}
-        </div>
-      ))}
+      {lyricsData.map((line, idx) => {
+        const isLineHebrew = line.some(word => detectHebrew(word.lyrics));
+
+        return (
+          <div
+            key={idx}
+            className="line"
+            style={{
+              direction: isLineHebrew ? "rtl" : "ltr",
+              textAlign: isLineHebrew ? "right" : "left"
+            }}
+          >
+            {line.map((word, wIdx) => (
+              <span key={wIdx} className="word-block">
+                {role?.toLowerCase() !== "singer" && (
+                  <div className="chord">{word.chords || ""}</div>
+                )}
+                <div className="lyrics">{word.lyrics}</div>
+              </span>
+            ))}
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -12,6 +12,7 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(() =>
         JSON.parse(localStorage.getItem("user"))
     );
+    
 
     const login = async (username, password) => {
         if (!username && !password) { //login by remembered

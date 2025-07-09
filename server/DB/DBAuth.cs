@@ -40,6 +40,7 @@ namespace JaMoveo.DB
         public async Task<User?> GetUserByUsernameAsync(string username)
         {
             return await _context.Users
+                .Include(u => u.Instrument)
                 .SingleOrDefaultAsync(u => u.Username == username);
         }
 

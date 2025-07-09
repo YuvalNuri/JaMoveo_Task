@@ -9,13 +9,13 @@ import { useSocket } from '../context/SocketContext';
 export default function MainPlayer() {
     const navigate = useNavigate();
     const { local, server } = useContext(ApiContext);
-    const { connection } = useSocket();
+    const { connection, selectedSong } = useSocket();
 
     useEffect(() => {
         if (!connection) return;
 
-        connection.on("SongSelected", (songName) => {
-            navigate("/live", { state: { songName } });
+        connection.on("SongSelected", (song) => {
+            navigate("/live", { state: { song } });
         });
 
         connection.on("SessionQuit", () => {
@@ -31,7 +31,7 @@ export default function MainPlayer() {
     return (
         <div>
             <h2>player</h2>
-
+            <h3>Waiting for next song</h3>
         </div>
     );
 }

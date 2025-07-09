@@ -36,7 +36,8 @@ export default function Results() {
     const handleSongSelect = (song) => {
         if (!connection) return;
 
-        connection.invoke("SelectSong", song.name)
+        console.log("Invoking SelectSong with:", song);
+        connection.invoke("SelectSong", song)
             .then(() => {
                 navigate("/live", { state: { song } });
             })
@@ -50,7 +51,7 @@ export default function Results() {
 
             <div className="results-grid">
                 {results.map((song, idx) => (
-                    <div key={idx} className="song-card horizontal" onClick={() => handleSongSelect(song)}>  {/*.name)}>*/}
+                    <div key={idx} className="song-card horizontal" onClick={() => handleSongSelect(song)}>
                         <img
                             src={song.img ?? '/src/assets/default-song-cover.jpg'}
                             alt="Song cover"

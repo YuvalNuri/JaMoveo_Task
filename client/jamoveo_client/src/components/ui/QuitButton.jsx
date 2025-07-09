@@ -9,7 +9,7 @@ export default function QuitButton() {
     if (!connection) return;
 
     connection.invoke("QuitSession")
-      .then(() => navigate("/mainadmin"))
+      .then(() => navigate("/"))
       .catch((err) => console.error(err));
   };
 

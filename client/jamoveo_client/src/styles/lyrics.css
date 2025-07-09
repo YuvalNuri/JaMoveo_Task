@@ -1,3 +1,8 @@
+.lyrics-container {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
 .line {
   display: flex;
   flex-wrap: nowrap;
@@ -10,11 +15,11 @@
   flex-direction: column;
   align-items: center;
   margin-right: 0.2rem;
-  min-width: 3ch; /* קובעת רוחב מינימלי */
+  min-width: 4ch; 
 }
 
 .chord {
-  font-size: 0.8rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: blue;
   line-height: 1;
@@ -22,6 +27,6 @@
 }
 
 .lyrics {
-  font-size: 1rem;
+  font-size: 1.5rem;
   line-height: 1.2;
 }

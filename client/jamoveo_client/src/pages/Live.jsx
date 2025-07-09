@@ -1,43 +1,85 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { MdScreenRotation } from "react-icons/md";
 import { useAuth } from "../context/AuthContext";
 import { useSocket } from "../context/SocketContext";
 import LyricsAndChordsDisplay from "../components/ui/LyricsAndChordsDisplay";
 import ScrollToggle from "../components/ui/ScrollToggle";
 import QuitButton from "../components/ui/QuitButton";
 import { ApiContext } from "../context/ApiContext";
+import '../styles/live.css';
 
 export default function Live() {
     const { local } = useContext(ApiContext);
     const { state } = useLocation();
+    const { selectedSong,resetSelectedSong, connection } = useSocket();
+    const song = state?.song || selectedSong;
     const navigate = useNavigate();
     const { user } = useAuth();
-    const { connection } = useSocket();
-    const { song } = state;
+    console.log(user);
     const lyricsContainerRef = useRef(null);
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
 
     const [lyricsData, setLyricsData] = useState(null);
-    const [isScrolling, setIsScrolling] = useState(true);
+    const [isScrolling, setIsScrolling] = useState(false);
+    const [atBottom, setAtBottom] = useState(false);
+    const [scrollSpeed, setScrollSpeed] = useState(110);
 
+    console.log("selectedSong:", selectedSong);
+    console.log("state.song:", state?.song);
+    console.log("song:", song);
+
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth < 768);
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         if (!lyricsContainerRef.current) return;
 
+        const container = lyricsContainerRef.current;
+
         let intervalId;
+        let timeoutId;
 
         if (isScrolling) {
-            intervalId = setInterval(() => {
-                lyricsContainerRef.current.scrollBy({
-                    top: 1,
-                    behavior: "smooth"
-                });
-            }, 30); // מהירות הגלילה
+            if (atBottom) { //if got to end and resumed - start from the begining
+                container.scrollTop = 0;
+                setAtBottom(false);
+            }
+
+            const startScrolling = () => {
+                intervalId = setInterval(() => {
+                    if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+                        setIsScrolling(false);
+                        setAtBottom(true);
+                        return;
+                    }
+                    container.scrollTop += 1;
+                }, scrollSpeed);
+            };
+
+            if (container.scrollTop === 0) {
+                timeoutId = setTimeout(startScrolling, 1000); // 1 second delay
+            } else {
+                startScrolling();
+            }
         }
 
         return () => {
             clearInterval(intervalId);
+            clearTimeout(timeoutId);
         };
-    }, [isScrolling]);
+    }, [isScrolling, scrollSpeed]);
 
     // fetch lyrics JSON
     useEffect(() => {
@@ -54,11 +96,8 @@ export default function Live() {
         if (!connection) return;
 
         const handler = () => {
-            if (user.role === "admin") {
-                navigate("/mainadmin");
-            } else {
-                navigate("/mainplayer");
-            }
+            navigate("/");
+            resetSelectedSong();
         };
 
         connection.on("SessionQuit", handler);
@@ -68,19 +107,9 @@ export default function Live() {
         };
     }, [connection, navigate, user.role]);
 
-    function detectHebrew(lyricsData) {
-        for (const line of lyricsData) {
-            for (const word of line) {
-                if (/[\u0590-\u05FF]/.test(word.lyrics)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     // render after hooks
-    if (!song || !lyricsData) return <p>Loading...</p>;
+if (!song) return <p>Waiting for the song to start...</p>;
+if (!lyricsData) return <p>Loading lyrics...</p>;
 
     return (
         <div className="live-container">
@@ -88,20 +117,55 @@ export default function Live() {
             <h3>{song.artist}</h3>
             {song.img && <img src={song.img} alt={song.name} />}
 
-            <LyricsAndChordsDisplay
-                lyricsData={lyricsData}
-                role={user.instrument}
-                isScrolling={isScrolling}
-                isHebrew={detectHebrew(lyricsData)}
-                containerRef={lyricsContainerRef}
-            />
+            {user.isAdmin && <QuitButton />}
 
-            <ScrollToggle
-                isScrolling={isScrolling}
-                onToggle={() => setIsScrolling((prev) => !prev)}
-            />
+            {isSmallScreen
+                ? <div>
+                    <MdScreenRotation size={50} />
+                    <p>For the best experience, please rotate your device or use a larger screen.</p>
+                </div>
+                : <>
+                    <ScrollToggle
+                        isScrolling={isScrolling}
+                        onToggle={() => setIsScrolling((prev) => !prev)}
+                    />
 
-            {user.role === "admin" && <QuitButton />}
+                    <div className="scroll-speed-controls">
+                        <p>Scroll speed:</p>
+                        <button
+                            onClick={() => setScrollSpeed(s => Math.max(50, s - 10))}
+                            disabled={scrollSpeed <= 50}
+                        >
+                            Faster
+                        </button>
+                        <button
+                            onClick={() => setScrollSpeed(s => Math.min(200, s + 10))}
+                            disabled={scrollSpeed >= 200}
+                        >
+                            Slower
+                        </button>
+                    </div>
+
+
+                    <div className="scroll-top-controls">
+                        <button onClick={() => {
+                            if (lyricsContainerRef.current) {
+                                lyricsContainerRef.current.scrollTop = 0;
+                                setAtBottom(false);
+                            }
+                        }}>
+                            Scroll to top
+                        </button>
+                    </div>
+
+                    <LyricsAndChordsDisplay
+                        lyricsData={lyricsData}
+                        role={user.instrument}
+                        isScrolling={isScrolling}
+                        containerRef={lyricsContainerRef}
+                    />
+                </>
+            }
         </div>
     );
 }

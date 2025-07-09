@@ -5,27 +5,36 @@ import { ApiContext } from "./ApiContext";
 const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
-  const [connection, setConnection] = useState(null);
-  const {local, server} = useContext(ApiContext);
+    const [connection, setConnection] = useState(null);
+    const { local, server } = useContext(ApiContext);
+    const [selectedSong, setSelectedSong] = useState(null);
 
-  useEffect(() => {
-    const conn = new signalR.HubConnectionBuilder()
-      .withUrl(local+"rehearsalHub")
-      .build();
+    const resetSelectedSong = () => setSelectedSong(null);
 
-    conn.start().then(() => console.log("Connected to hub"));
-    setConnection(conn);
+    useEffect(() => {
+        const conn = new signalR.HubConnectionBuilder()
+            .withUrl(local + "rehearsalHub")
+            .build();
 
-    return () => {
-      conn.stop();
-    };
-  }, []);
+        conn.start().then(() => console.log("Connected to hub"));
+        setConnection(conn);
 
-  return (
-    <SocketContext.Provider value={{ connection }}>
-      {children}
-    </SocketContext.Provider>
-  );
+        conn.on("SongSelected", (song) => {
+            console.log("Received SongSelected:", song);
+            setSelectedSong(song);
+        });
+
+        return () => {
+            conn.stop();
+        };
+
+    }, []);
+
+    return (
+        <SocketContext.Provider value={{ connection, selectedSong, resetSelectedSong }}>
+            {children}
+        </SocketContext.Provider>
+    );
 };
 
 export const useSocket = () => useContext(SocketContext);
