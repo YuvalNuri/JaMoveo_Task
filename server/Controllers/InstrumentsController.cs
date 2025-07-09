@@ -25,7 +25,7 @@ namespace JaMoveo.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest("failed to read instruments");
+                return BadRequest(ex.Message);
             }
         }
     }
