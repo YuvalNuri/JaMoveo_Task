@@ -5,7 +5,6 @@ import './App.css'
 import AppRouter from './routes/AppRouter'
 import { AuthProvider } from './context/AuthContext'
 import ApiContextProvider from './context/ApiContext'
-import NavBar from './components/layout/NavBar'
 import Header from './components/layout/Header'
 import { SocketProvider } from './context/SocketContext'
 
@@ -16,7 +15,6 @@ function App() {
         <SocketProvider>
           <AuthProvider>
             <Header />
-            <NavBar />
             <AppRouter />
           </AuthProvider>
         </SocketProvider>

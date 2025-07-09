@@ -1,6 +1,7 @@
 using JaMoveo.DATA;
 using JaMoveo.DB;
 using JaMoveo.Hubs;
+using JaMoveo.Models;
 using JaMoveo.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,7 @@ builder.Services.AddScoped<DBInstruments>();
 builder.Services.AddScoped<InstrumentsRepository>();
 builder.Services.AddScoped<SongsRepository>();
 
+builder.Services.AddSingleton<SessionStateService>();
 
 builder.Services.AddCors(options =>
 {
