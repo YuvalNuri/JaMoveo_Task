@@ -1,6 +1,4 @@
-# build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-
 WORKDIR /src
 
 COPY server/JaMoveo.csproj ./server/
@@ -8,9 +6,8 @@ RUN dotnet restore ./server/JaMoveo.csproj
 
 COPY server/. ./server/
 WORKDIR /src/server
-RUN dotnet publish -c Release -o /app
+RUN dotnet publish JaMoveo.csproj -c Release -o /app
 
-# run
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app .
