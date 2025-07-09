@@ -417,11 +417,3 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-
-# ignore appsettings.json
-/server/appsettings.json
-
-# ignore node_modules in client
-/client/node_modules/
-
-
